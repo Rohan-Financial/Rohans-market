@@ -1,57 +1,40 @@
-import { useRouter } from 'next/router';
-import { products } from '@/data/products';
-import Head from 'next/head';
-
-export default function ProductDetail() {
-  const router = useRouter();
-  const { id } = router.query;
-
-  const product = products.find((p) => p.id.toString() === id);
-
-  if (!product) {
-    return (
-      <main className="min-h-screen flex items-center justify-center text-gray-600">
-        <p>Loading product...</p>
-      </main>
-    );
-  }
-
-  return (
-    <>
-      <Head>
-        <title>{product.name} | Rohan’s Market</title>
-      </Head>
-
-      <main className="min-h-screen bg-gray-50 text-gray-900 p-6">
-        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-          <div className="h-64 bg-gray-200 mb-4" />
-          <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-          <p className="text-gray-600 mb-4">Category: {product.category}</p>
-          <p className="text-sm text-gray-500 mb-6">
-            This is a placeholder for product details. You can add pricing, descriptions,
-            vendor info, and more here.
-          </p>
-
-          <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-2">Customer Reviews</h2>
-            {product.reviews?.length ? (
-              <ul className="space-y-4">
-                {product.reviews.map((review, index) => (
-                  <li key={index} className="border-t pt-2">
-                    <p className="text-sm text-gray-800">
-                      <strong>{review.user}</strong> —{' '}
-                      {Array(review.rating).fill('⭐').join('')}
-                    </p>
-                    <p className="text-sm text-gray-600">{review.comment}</p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-gray-500">No reviews yet.</p>
-            )}
-          </div>
-        </div>
-      </main>
-    </>
-  );
-}
+export const products = [
+  {
+    id: 1,
+    name: 'Wireless Headphones',
+    category: 'Electronics',
+    deal: true,
+    reviews: [
+      { user: 'Ava R.', rating: 5, comment: 'Amazing sound quality and battery life!' },
+      { user: 'Liam T.', rating: 4, comment: 'Very comfortable, but wish it had noise canceling.' },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Eco-Friendly Water Bottle',
+    category: 'Home',
+    deal: false,
+    reviews: [
+      { user: 'Maya S.', rating: 5, comment: 'Keeps water cold all day. Love the design!' },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Bluetooth Speaker',
+    category: 'Electronics',
+    deal: true,
+    reviews: [
+      { user: 'Noah K.', rating: 4, comment: 'Great bass for the size. Perfect for travel.' },
+      { user: 'Ella J.', rating: 5, comment: 'Crystal clear sound and easy pairing.' },
+    ],
+  },
+  {
+    id: 4,
+    name: 'Organic Cotton T-Shirt',
+    category: 'Fashion',
+    deal: false,
+    reviews: [
+      { user: 'James L.', rating: 5, comment: 'Super soft and fits perfectly.' },
+    ],
+  },
+];
