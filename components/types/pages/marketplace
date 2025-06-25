@@ -1,0 +1,30 @@
+// pages/marketplace/index.tsx
+import ProductCard from '@/components/ProductCard';
+import type { Product } from '@/types/product';
+
+const mockProducts: Product[] = [
+  {
+    id: '1',
+    title: 'Handcrafted Mug',
+    price: 2500,
+    imageUrl: '/images/mug.jpg',
+    description: 'A cozy ceramic mug for your morning brew.',
+  },
+  {
+    id: '2',
+    title: 'Leather Wallet',
+    price: 4500,
+    imageUrl: '/images/wallet.jpg',
+    description: 'Minimalist wallet made from genuine leather.',
+  },
+];
+
+export default function MarketplacePage() {
+  return (
+    <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
+      {mockProducts.map((product) => (
+        <ProductCard key={product.id} {...product} />
+      ))}
+    </div>
+  );
+}
