@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { products } from '@/data/products';
 import { synonyms } from '@/data/synonyms';
@@ -77,10 +78,12 @@ export default function Marketplace() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="bg-white p-4 rounded shadow">
-              <div className="h-32 bg-gray-200 mb-2" />
-              <p className="text-sm font-medium">{product.name}</p>
-            </div>
+            <Link key={product.id} href={`/marketplace/${product.id}`}>
+              <a className="block bg-white p-4 rounded shadow hover:shadow-md transition">
+                <div className="h-32 bg-gray-200 mb-2" />
+                <p className="text-sm font-medium">{product.name}</p>
+              </a>
+            </Link>
           ))}
         </div>
       </main>
