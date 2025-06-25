@@ -6,6 +6,7 @@ import { synonyms } from '@/data/synonyms';
 export default function Marketplace() {
   const router = useRouter();
   const searchTerm = (router.query.search as string || '').toLowerCase();
+  const selectedCategory = (router.query.category as string) || 'All';
 
   const expandedTerms = searchTerm
     ? searchTerm
@@ -14,12 +15,29 @@ export default function Marketplace() {
     : [];
 
   const filteredProducts = expandedTerms.length
-    ? products.filter((p) =>
-        expandedTerms.some((term) =>
-          p.name.toLowerCase().includes(term)
-        )
+    ? products.filter(
+        (p) =>
+          expandedTerms.some((term) =>
+            p.name.toLowerCase().includes(term)
+          ) &&
+          (selectedCategory === 'All' || p.category === selectedCategory)
       )
-    : products;
+    : products.filter(
+        (p) =>
+          selectedCategory === 'All' || p.category === selectedCategory
+      );
+
+  const categories = ['All', ...Array.from(new Set(products.map((p) => p.category)))];
+
+  const handleCategoryClick = (cat: string) => {
+    const params = new URLSearchParams(router.query as any);
+    if (cat === 'All') {
+      params.delete('category');
+    } else {
+      params.set('category', cat);
+    }
+    router.push(`/marketplace?${params.toString()}`);
+  };
 
   return (
     <>
@@ -33,8 +51,28 @@ export default function Marketplace() {
           Browse products from verified vendors powered by Rohan Financial.
         </p>
 
+        <div className="flex gap-2 mb-6 flex-wrap">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => handleCategoryClick(cat)}
+              className={`px-4 py-2 rounded ${
+                selectedCategory === cat
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
         <h2 className="text-xl font-semibold mb-4">
-          {searchTerm ? `Search results for "${searchTerm}"` : 'Recommended for You'}
+          {searchTerm
+            ? `Search results for "${searchTerm}"`
+            : selectedCategory !== 'All'
+            ? `Showing ${selectedCategory} products`
+            : 'Recommended for You'}
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
