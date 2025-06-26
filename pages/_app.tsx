@@ -1,13 +1,14 @@
+// pages/_app.tsx
+
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
-import { CartProvider } from '@/lib/CartContext';
-import Header from '@/components/Header';
+import { Toaster } from 'react-hot-toast';
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <CartProvider>
-      <Header />
+    <>
       <Component {...pageProps} />
-    </CartProvider>
+      <Toaster position="top-right" />
+    </>
   );
 }
