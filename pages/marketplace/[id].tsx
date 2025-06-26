@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import { products } from '@/data/products';
 import Head from 'next/head';
 import { useCart } from '@/lib/CartContext';
+import { useEffect } from 'react';
+import { addRecentlyViewed } from '@/lib/recentlyViewed';
 
 export default function ProductDetail() {
   const router = useRouter();
@@ -9,6 +11,12 @@ export default function ProductDetail() {
   const { add } = useCart();
 
   const product = products.find((p) => p.id.toString() === id);
+
+  useEffect(() => {
+    if (product) {
+      addRecentlyViewed(product);
+    }
+  }, [product]);
 
   if (!product) {
     return (
