@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { HeartIcon, ScaleIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
+import CountdownTimer from './CountdownTimer';
 import {
   isWishlisted,
   addToWishlist,
@@ -76,6 +77,18 @@ export default function ProductCard({ product }) {
       <img src={product.image} alt={product.name} className="mb-4 rounded" />
       <h3 className="text-lg font-semibold">{product.name}</h3>
       <p className="text-gray-600">${product.price}</p>
+
+      {/* Low-stock alert */}
+      {product.stock <= 5 && (
+        <p className="text-sm text-red-600 font-medium mt-2">
+          Only {product.stock} left in stock!
+        </p>
+      )}
+
+      {/* Promo countdown */}
+      {product.promoEnd && (
+        <CountdownTimer endTime={product.promoEnd} />
+      )}
     </div>
   );
 }
