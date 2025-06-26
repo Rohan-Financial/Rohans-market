@@ -1,17 +1,14 @@
-import Image from 'next/image';
+import ProductCard from '@/components/ProductCard';
+import { products } from '@/data/products';
 
-type ProductCardProps = {
-  title: string;
-  price: number;
-  imageUrl: string;
-};
-
-export default function ProductCard({ title, price, imageUrl }: ProductCardProps) {
+export default function Marketplace() {
   return (
-    <div style={{ border: '1px solid #ddd', padding: '1rem', borderRadius: '8px' }}>
-      <Image src={imageUrl} alt={title} width={300} height={200} style={{ borderRadius: '4px' }} />
-      <h3>{title}</h3>
-      <p style={{ fontWeight: 'bold' }}>${(price / 100).toFixed(2)}</p>
-    </div>
+    <main className="p-6">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+    </main>
   );
 }
