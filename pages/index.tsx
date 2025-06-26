@@ -1,9 +1,10 @@
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import { products } from '@/data/products';
 import { getRecentlyViewed } from '@/lib/recentlyViewed';
 import ProductCard from '@/components/ProductCard';
 import CategoryFilter from '@/components/CategoryFilter';
-import { useEffect, useState } from 'react';
+import ShoppableVideo from '@/components/ShoppableVideo';
 
 export default function Home() {
   const [recent, setRecent] = useState([]);
@@ -43,7 +44,7 @@ export default function Home() {
 
         <CategoryFilter onFilter={handleFilter} />
 
-        <section>
+        <section className="mb-12">
           <h2 className="text-lg font-semibold mb-3">All Products</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((product) => (
@@ -51,6 +52,8 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+        <ShoppableVideo />
       </main>
     </>
   );
