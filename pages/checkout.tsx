@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { getCartItems, clearCart } from '@/lib/cart';
+import { validatePromo } from '@/lib/promos';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 export default function CheckoutPage() {
   const [items, setItems] = useState([]);
   const [form, setForm] = useState({ name: '', email: '', address: '' });
+  const [promoCode, setPromoCode] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -16,6 +19,17 @@ export default function CheckoutPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handlePromoApply = () => {
+    const promo = validatePromo(promoCode);
+    if (promo) {
+      setAppliedPromo(promo);
+      toast.success(`Promo "${promo.code}" applied!`);
+    } else {
+      setAppliedPromo(null);
+      toast.error('Invalid promo code');
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -30,7 +44,12 @@ export default function CheckoutPage() {
     router.push('/');
   };
 
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const discount =
+    appliedPromo?.type === 'percent'
+      ? (subtotal * appliedPromo.value) / 100
+      : appliedPromo?.value || 0;
+  const total = subtotal - discount;
 
   return (
     <main className="p-6 max-w-2xl mx-auto">
@@ -61,6 +80,24 @@ export default function CheckoutPage() {
           onChange={handleChange}
           className="w-full p-2 border rounded"
         />
+
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Promo Code"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
+            className="flex-1 p-2 border rounded"
+          />
+          <button
+            type="button"
+            onClick={handlePromoApply}
+            className="bg-gray-200 px-4 rounded hover:bg-gray-300"
+          >
+            Apply
+          </button>
+        </div>
+
         <button
           type="submit"
           className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
@@ -83,6 +120,16 @@ export default function CheckoutPage() {
                 <span>${(item.price * item.quantity).toFixed(2)}</span>
               </li>
             ))}
+            <li className="flex justify-between border-t pt-2">
+              <span>Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </li>
+            {appliedPromo && (
+              <li className="flex justify-between text-green-600">
+                <span>Promo ({appliedPromo.code})</span>
+                <span>- ${discount.toFixed(2)}</span>
+              </li>
+            )}
             <li className="flex justify-between font-semibold border-t pt-2">
               <span>Total</span>
               <span>${total.toFixed(2)}</span>
