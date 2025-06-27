@@ -15,6 +15,7 @@ import {
   removeFromCompare,
   getCompare,
 } from '@/lib/compare';
+import { addToCart } from '@/lib/cart';
 
 export default function ProductCard({ product }) {
   const [wishlisted, setWishlisted] = useState(false);
@@ -53,6 +54,16 @@ export default function ProductCard({ product }) {
     setCompared(!compared);
   };
 
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    });
+    toast.success('Added to cart!');
+  };
+
   return (
     <div className="relative rounded border p-4 shadow bg-white">
       {/* Icons */}
@@ -89,6 +100,14 @@ export default function ProductCard({ product }) {
       {product.promoEnd && (
         <CountdownTimer endTime={product.promoEnd} />
       )}
+
+      {/* Add to Cart */}
+      <button
+        onClick={handleAddToCart}
+        className="mt-3 w-full rounded bg-blue-600 px-4 py-2 text-white font-semibold hover:bg-blue-700 transition"
+      >
+        Add to Cart
+      </button>
     </div>
   );
 }
