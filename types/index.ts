@@ -1,8 +1,9 @@
-// types/index.ts
-
-export type Order = {
+type Product = {
   id: string;
-  date: string;
-  total: number;
-  status: 'Processing' | 'Shipped' | 'Delivered';
+  name: string;
+  price: number;
+  stock: number;
+  image: string;
+  promoEnd?: string;
+  category: string; // ✅ Added to ensure Next.js build compiles
 };
